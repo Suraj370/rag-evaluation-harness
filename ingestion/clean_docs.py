@@ -1,3 +1,4 @@
+import html
 import json
 import re
 from pathlib import Path
@@ -16,10 +17,28 @@ def strip_frontmatter(text: str) -> str:
 
 
 def clean_content(text: str) -> str:
-    # Hugo shortcodes: {{< ... >}} and {{% ... %}}
+    # Hugo block shortcodes with content: {{< tag >}}...{{< /tag >}}
+    text = re.sub(r"\{\{<\s*\w[^>]*>\}\}.*?\{\{<\s*/\w+\s*>\}\}", "", text, flags=re.DOTALL)
+    # Hugo inline/self-closing shortcodes: {{< ... >}} and {{% ... %}}
     text = re.sub(r"\{\{[<%].*?[>%]\}\}", "", text, flags=re.DOTALL)
+    # Hugo heading anchors: {#some-anchor}
+    text = re.sub(r"\{#[^}]+\}", "", text)
     # HTML comments
     text = re.sub(r"<!--.*?-->", "", text, flags=re.DOTALL)
+    # HTML tags (<table>, <td>, <br/>, etc.) — strip tags, keep inner text
+    text = re.sub(r"<[^>]+>", " ", text)
+    # HTML entities (&nbsp;, &#39;, &amp;, etc.)
+    text = html.unescape(text)
+    # Collapse runs of spaces/tabs on each line (newlines preserved)
+    text = re.sub(r"[ \t]{2,}", " ", text)
+    # Strip lines that are now blank or only whitespace
+    text = "\n".join(line.strip() for line in text.splitlines())
+    # Collapse 3+ blank lines into 2 (run early here for HTML-heavy docs)
+    text = re.sub(r"\n{3,}", "\n\n", text)
+    # Markdown table separator lines (|---|---|)
+    text = re.sub(r"^\s*\|[\s|:-]+\|\s*$", "", text, flags=re.MULTILINE)
+    # Markdown table rows: strip leading/trailing pipes, split cells by |
+    text = re.sub(r"^\s*\|(.+)\|\s*$", lambda m: "  ".join(c.strip() for c in m.group(1).split("|")), text, flags=re.MULTILINE)
     # Markdown images ![alt](url)
     text = re.sub(r"!\[.*?\]\(.*?\)", "", text)
     # Markdown links [text](url) → text
@@ -29,10 +48,12 @@ def clean_content(text: str) -> str:
     # Bold/italic: ***text***, **text**, *text*, __text__, _text_
     text = re.sub(r"\*{1,3}([^*]+)\*{1,3}", r"\1", text)
     text = re.sub(r"_{1,2}([^_]+)_{1,2}", r"\1", text)
+    # Fenced code blocks (``` or ~~~ with optional language tag) — must run before inline code
+    text = re.sub(r"(`{3,}|~{3,})[^\n]*\n.*?\1", "", text, flags=re.DOTALL)
     # Inline code `code` → code
     text = re.sub(r"`([^`]+)`", r"\1", text)
-    # Fenced code blocks
-    text = re.sub(r"```.*?```", "", text, flags=re.DOTALL)
+    # Orphaned backticks left by partial fence matches
+    text = re.sub(r"`+", "", text)
     # Collapse 3+ blank lines into 2
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
