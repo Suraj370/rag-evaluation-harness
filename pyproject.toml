@@ -1,0 +1,13 @@
+[project]
+name = "rag-evaluation-harness"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "dotenv>=0.9.9",
+    "openai>=2.44.0",
+    "fastapi>=0.115.0",
+    "uvicorn>=0.30.0",
+    "psycopg2-binary>=2.9.12",
+]

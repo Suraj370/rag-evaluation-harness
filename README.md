@@ -9,7 +9,7 @@ The project is designed to answer a practical question: how do different chunkin
 
 ## Demo
 - Live: _Coming soon_
-- GitHub: _Coming soon_
+- GitHub: https://github.com/Suraj370/rag-evaluation-harness
 
 ## Tech stack
 - Python

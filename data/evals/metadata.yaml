@@ -1,0 +1,25 @@
+dataset_name: kubernetes-rag-eval
+version: v1
+
+knowledge_base: kubernetes-docs
+
+num_questions: 50
+
+difficulty_distribution:
+  easy: 15
+  medium: 20
+  hard: 10
+  multi_hop: 5
+
+categories:
+  - architecture
+  - pods
+  - deployments
+  - networking
+  - scheduling
+  - storage
+  - security
+  - operations
+
+created_by: Suraj Panda
+created_date: 2026-06-18

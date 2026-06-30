@@ -1,0 +1,21 @@
+# Environment
+.env
+.venv/
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.python-version
+
+# Data (large files)
+data/raw/
+data/processed/
+
+# uv
+uv.lock
+
+# IDE
+.vscode/
+.idea/
