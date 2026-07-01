@@ -10,4 +10,10 @@ dependencies = [
     "fastapi>=0.115.0",
     "uvicorn>=0.30.0",
     "psycopg2-binary>=2.9.12",
+    "qdrant-client>=1.18.0",
+    "sqlmodel>=0.0.39",
+    "pydantic-settings>=2.14.2",
 ]
+
+[tool.setuptools.packages.find]
+include = ["app*"]

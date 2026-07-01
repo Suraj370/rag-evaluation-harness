@@ -1,0 +1,133 @@
+Metadata-Version: 2.4
+Name: rag-evaluation-harness
+Version: 0.1.0
+Summary: Add your description here
+Requires-Python: >=3.14
+Description-Content-Type: text/markdown
+Requires-Dist: dotenv>=0.9.9
+Requires-Dist: openai>=2.44.0
+Requires-Dist: fastapi>=0.115.0
+Requires-Dist: uvicorn>=0.30.0
+Requires-Dist: psycopg2-binary>=2.9.12
+Requires-Dist: qdrant-client>=1.18.0
+Requires-Dist: sqlmodel>=0.0.39
+Requires-Dist: pydantic-settings>=2.14.2
+
+# RAG Evaluation Harness for Public Technical Docs
+
+> An evaluation-first RAG project for measuring retrieval quality, answer quality, and failure modes over real technical documentation.
+
+## Overview
+This project explores how to build a retrieval-augmented generation system that is measured, reproducible, and useful as an AI engineering portfolio piece. Instead of stopping at a basic chatbot demo, the focus is on creating an evaluation harness over a real public documentation corpus, defining realistic user questions, storing reference answers and citations, and comparing retrieval and generation strategies with repeatable metrics.
+
+The project is designed to answer a practical question: how do different chunking, retrieval, filtering, and reranking choices affect the quality of answers generated from technical docs? By combining an API layer, retrieval baselines, structured grading, and failure analysis, it demonstrates a more production-minded approach to RAG system design.
+
+## Demo
+- Live: _Coming soon_
+- GitHub: https://github.com/Suraj370/rag-evaluation-harness
+
+## Tech stack
+- Python
+- FastAPI
+- FAISS
+- OpenAI
+- PostgreSQL
+- Docker
+- GitHub Actions
+
+## Architecture
+- A document ingestion pipeline parses an official documentation corpus into clean text records.
+- The corpus is chunked using at least two chunking strategies, with metadata such as section title and source URL attached to each chunk.
+- Chunk records are persisted so retrieval experiments are reproducible across runs.
+- A dense retrieval baseline uses FAISS embeddings to return candidate context for a user question.
+- Retrieval is extended with metadata filtering and a reranking step to compare methods.
+- A FastAPI service exposes an endpoint that retrieves context and generates answers.
+- A structured evaluation script grades outputs for retrieval hit rate, citation correctness, and answer relevance.
+- Experiment results are stored in PostgreSQL or versioned JSON and summarized in a leaderboard-style comparison.
+- Failure analysis notebooks document where the system succeeds and where retrieval or answer generation breaks down.
+
+## Features
+- Evaluation-first RAG workflow built around a real technical documentation corpus
+- Versioned evaluation dataset with realistic user questions, reference answers, and source citations
+- Document ingestion and cleaning pipeline for public docs
+- Multiple chunking strategies for side-by-side comparison
+- Dense retrieval baseline with Qdrant
+- Metadata-aware retrieval experiments
+- Reranking step for retrieval quality comparison
+- FastAPI endpoint for retrieval and answer generation
+- Structured grading for citation correctness, answer relevance, and retrieval hit rate
+- Experiment comparison across chunk size, overlap, top-k, and reranking settings
+- Public-project packaging with Docker, GitHub Actions, README documentation, and failure-analysis notebooks
+
+## Getting started
+1. Clone the repository
+   ```bash
+   git clone <repo-url>
+   cd <repo-folder>
+   ```
+
+2. Create and activate a virtual environment
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+   On Windows:
+   ```bash
+   .venv\Scripts\activate
+   ```
+
+3. Install dependencies
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Configure environment variables
+   Create a `.env` file and add the required settings for items such as:
+   ```env
+   OPENAI_API_KEY={TODO: add key}
+   DATABASE_URL={TODO: add postgres connection string}
+   ```
+
+5. Ingest and preprocess the documentation corpus
+   ```bash
+   python scripts/ingest.py
+   ```
+
+6. Build chunk indexes and retrieval artifacts
+   ```bash
+   python scripts/build_index.py
+   ```
+
+7. Run the API locally
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+8. Run the evaluation suite
+   ```bash
+   python scripts/evaluate.py
+   ```
+
+9. Run tests
+   ```bash
+   pytest
+   ```
+
+10. Optional: run with Docker
+   ```bash
+   docker build -t rag-eval-harness .
+   docker run -p 8000:8000 rag-eval-harness
+   ```
+
+## Roadmap
+- Add hybrid search with Elasticsearch lexical retrieval plus FAISS dense retrieval
+- Track experiments with MLflow or Weights & Biases to compare runs visually
+- Add query classification that routes different question types to different retrieval settings
+- Deploy a minimal demo endpoint and evaluation dashboard on AWS or Render
+
+## What I learned
+- How to approach RAG systems as an AI Engineer by building an evaluation loop, not just a prompt-based demo
+- How chunking strategy, metadata filtering, reranking, and top-k choices affect retrieval performance and downstream answer quality
+- How to design a FastAPI-based AI service that separates ingestion, retrieval, generation, and evaluation concerns
+- How to make experiments more reproducible by versioning datasets, persisting chunk records, and comparing runs systematically
+- How to communicate AI system tradeoffs through technical writing, leaderboard summaries, and failure-analysis notebooks

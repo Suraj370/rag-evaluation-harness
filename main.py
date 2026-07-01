@@ -1,8 +1,3 @@
-from fastapi import FastAPI
+from app.main import app
 
-app = FastAPI(title="RAG Evaluation Harness", version="0.1.0")
-
-
-@app.get("/health")
-def health():
-    return {"status": "ok"}
+__all__ = ["app"]

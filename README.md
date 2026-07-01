@@ -36,7 +36,7 @@ The project is designed to answer a practical question: how do different chunkin
 - Versioned evaluation dataset with realistic user questions, reference answers, and source citations
 - Document ingestion and cleaning pipeline for public docs
 - Multiple chunking strategies for side-by-side comparison
-- Dense retrieval baseline with FAISS
+- Dense retrieval baseline with Qdrant
 - Metadata-aware retrieval experiments
 - Reranking step for retrieval quality comparison
 - FastAPI endpoint for retrieval and answer generation
