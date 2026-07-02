@@ -13,6 +13,9 @@ dependencies = [
     "qdrant-client>=1.18.0",
     "sqlmodel>=0.0.39",
     "pydantic-settings>=2.14.2",
+    "torch>=2.12.1",
+    "transformers>=5.12.1",
+    "accelerate>=1.14.0",
 ]
 
 [tool.setuptools.packages.find]

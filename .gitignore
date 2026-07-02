@@ -13,6 +13,10 @@ __pycache__/
 data/raw/
 data/processed/
 
+# Local model weights
+models/
+app/models/Qwen3-Reranker-0.6B/
+
 # uv
 uv.lock
 
